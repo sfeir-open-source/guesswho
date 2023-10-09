@@ -135,10 +135,11 @@ public class RoomResource {
     /**
      * {@code GET  /rooms} : get all the rooms.
      *
+     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of rooms in body.
      */
     @GetMapping("/rooms")
-    public List<RoomDTO> getAllRooms() {
+    public List<RoomDTO> getAllRooms(@RequestParam(required = false, defaultValue = "false") boolean eagerload) {
         log.debug("REST request to get all Rooms");
         return roomService.findAll();
     }

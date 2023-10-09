@@ -18,6 +18,10 @@ public class RoomDTO implements Serializable {
     @NotNull
     private String code;
 
+    private PlayerDTO player1;
+
+    private PlayerDTO player2;
+
     public Long getId() {
         return id;
     }
@@ -40,6 +44,22 @@ public class RoomDTO implements Serializable {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public PlayerDTO getPlayer1() {
+        return player1;
+    }
+
+    public void setPlayer1(PlayerDTO player1) {
+        this.player1 = player1;
+    }
+
+    public PlayerDTO getPlayer2() {
+        return player2;
+    }
+
+    public void setPlayer2(PlayerDTO player2) {
+        this.player2 = player2;
     }
 
     @Override
@@ -70,6 +90,8 @@ public class RoomDTO implements Serializable {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", code='" + getCode() + "'" +
+            ", player1=" + getPlayer1() +
+            ", player2=" + getPlayer2() +
             "}";
     }
 }

@@ -1,0 +1,11 @@
+id;player_1_chosen;player_2_chosen;player_1_discarded;player_2_discarded;game_id;theme_card_id
+1;true;false;false;true;1;1
+2;false;true;false;false;2;2
+3;false;false;true;true;3;3
+4;true;true;true;true;4;4
+5;true;false;true;true;5;5
+6;false;true;false;false;6;6
+7;false;true;false;false;7;7
+8;false;false;false;true;8;8
+9;false;false;true;false;9;9
+10;false;true;false;true;10;10

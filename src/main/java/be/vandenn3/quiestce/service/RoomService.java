@@ -10,6 +10,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -89,6 +91,15 @@ public class RoomService {
     }
 
     /**
+     * Get all the rooms with eager load of many-to-many relationships.
+     *
+     * @return the list of entities.
+     */
+    public Page<RoomDTO> findAllWithEagerRelationships(Pageable pageable) {
+        return roomRepository.findAllWithEagerRelationships(pageable).map(roomMapper::toDto);
+    }
+
+    /**
      * Get one room by id.
      *
      * @param id the id of the entity.
@@ -97,7 +108,7 @@ public class RoomService {
     @Transactional(readOnly = true)
     public Optional<RoomDTO> findOne(Long id) {
         log.debug("Request to get Room : {}", id);
-        return roomRepository.findById(id).map(roomMapper::toDto);
+        return roomRepository.findOneWithEagerRelationships(id).map(roomMapper::toDto);
     }
 
     /**

@@ -18,7 +18,23 @@
   "name": "Room",
   "pagination": "no",
   "readOnly": false,
-  "relationships": [],
+  "relationships": [
+    {
+      "otherEntityField": "pseudo",
+      "otherEntityName": "player",
+      "relationshipName": "player1",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    },
+    {
+      "otherEntityField": "pseudo",
+      "otherEntityName": "player",
+      "relationshipName": "player2",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
   "searchEngine": "no",
-  "service": "serviceClass"
+  "service": "serviceClass",
+  "skipClient": true
 }

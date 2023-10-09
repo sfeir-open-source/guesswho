@@ -2,6 +2,7 @@ package be.vandenn3.quiestce.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -9,16 +10,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import be.vandenn3.quiestce.IntegrationTest;
 import be.vandenn3.quiestce.domain.Room;
 import be.vandenn3.quiestce.repository.RoomRepository;
+import be.vandenn3.quiestce.service.RoomService;
 import be.vandenn3.quiestce.service.dto.RoomDTO;
 import be.vandenn3.quiestce.service.mapper.RoomMapper;
 import jakarta.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
@@ -28,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link RoomResource} REST controller.
  */
 @IntegrationTest
+@ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @WithMockUser
 class RoomResourceIT {
@@ -47,8 +56,14 @@ class RoomResourceIT {
     @Autowired
     private RoomRepository roomRepository;
 
+    @Mock
+    private RoomRepository roomRepositoryMock;
+
     @Autowired
     private RoomMapper roomMapper;
+
+    @Mock
+    private RoomService roomServiceMock;
 
     @Autowired
     private EntityManager em;
@@ -194,6 +209,23 @@ class RoomResourceIT {
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)));
     }
 
+    @SuppressWarnings({ "unchecked" })
+    void getAllRoomsWithEagerRelationshipsIsEnabled() throws Exception {
+        when(roomServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restRoomMockMvc.perform(get(ENTITY_API_URL + "?eagerload=true")).andExpect(status().isOk());
+
+        verify(roomServiceMock, times(1)).findAllWithEagerRelationships(any());
+    }
+
+    @SuppressWarnings({ "unchecked" })
+    void getAllRoomsWithEagerRelationshipsIsNotEnabled() throws Exception {
+        when(roomServiceMock.findAllWithEagerRelationships(any())).thenReturn(new PageImpl(new ArrayList<>()));
+
+        restRoomMockMvc.perform(get(ENTITY_API_URL + "?eagerload=false")).andExpect(status().isOk());
+        verify(roomRepositoryMock, times(1)).findAll(any(Pageable.class));
+    }
+
     @Test
     @Transactional
     void getRoom() throws Exception {
@@ -330,8 +362,6 @@ class RoomResourceIT {
         Room partialUpdatedRoom = new Room();
         partialUpdatedRoom.setId(room.getId());
 
-        partialUpdatedRoom.code(UPDATED_CODE);
-
         restRoomMockMvc
             .perform(
                 patch(ENTITY_API_URL_ID, partialUpdatedRoom.getId())
@@ -346,7 +376,7 @@ class RoomResourceIT {
         assertThat(roomList).hasSize(databaseSizeBeforeUpdate);
         Room testRoom = roomList.get(roomList.size() - 1);
         assertThat(testRoom.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testRoom.getCode()).isEqualTo(UPDATED_CODE);
+        assertThat(testRoom.getCode()).isEqualTo(DEFAULT_CODE);
     }
 
     @Test

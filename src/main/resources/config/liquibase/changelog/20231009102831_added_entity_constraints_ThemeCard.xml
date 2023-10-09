@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <!--
+        Added the constraints for entity ThemeCard.
+    -->
+    <changeSet id="20231009102831-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="theme_id"
+                                 baseTableName="theme_card"
+                                 constraintName="fk_theme_card__theme_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="theme"
+                                 />
+
+        <addForeignKeyConstraint baseColumnNames="picture_id"
+                                 baseTableName="theme_card"
+                                 constraintName="fk_theme_card__picture_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="picture"
+                                 />
+    </changeSet>
+</databaseChangeLog>

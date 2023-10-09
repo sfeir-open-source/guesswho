@@ -31,6 +31,12 @@ public class Room implements Serializable {
     @Column(name = "code", nullable = false)
     private String code;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Player player1;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Player player2;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -70,6 +76,32 @@ public class Room implements Serializable {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public Player getPlayer1() {
+        return this.player1;
+    }
+
+    public void setPlayer1(Player player) {
+        this.player1 = player;
+    }
+
+    public Room player1(Player player) {
+        this.setPlayer1(player);
+        return this;
+    }
+
+    public Player getPlayer2() {
+        return this.player2;
+    }
+
+    public void setPlayer2(Player player) {
+        this.player2 = player;
+    }
+
+    public Room player2(Player player) {
+        this.setPlayer2(player);
+        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

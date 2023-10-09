@@ -51,6 +51,27 @@ public class CacheConfiguration {
             createCache(cm, be.vandenn3.quiestce.domain.PersistentToken.class.getName());
             createCache(cm, be.vandenn3.quiestce.domain.User.class.getName() + ".persistentTokens");
             createCache(cm, be.vandenn3.quiestce.domain.Room.class.getName());
+            createCache(cm, be.vandenn3.quiestce.domain.Player.class.getName());
+            createCache(cm, be.vandenn3.quiestce.domain.UserAnonymous.class.getName());
+            createCache(cm, be.vandenn3.quiestce.domain.Picture.class.getName());
+            createCache(cm, be.vandenn3.quiestce.domain.Theme.class.getName());
+            createCache(cm, be.vandenn3.quiestce.domain.Theme.class.getName() + ".mainPictures");
+            createCache(cm, be.vandenn3.quiestce.domain.ThemeCard.class.getName());
+            createCache(cm, be.vandenn3.quiestce.domain.ThemeCard.class.getName() + ".themes");
+            createCache(cm, be.vandenn3.quiestce.domain.ThemeCard.class.getName() + ".pictures");
+            createCache(cm, be.vandenn3.quiestce.domain.Game.class.getName());
+            createCache(cm, be.vandenn3.quiestce.domain.Game.class.getName() + ".rooms");
+            createCache(cm, be.vandenn3.quiestce.domain.Game.class.getName() + ".themes");
+            createCache(cm, be.vandenn3.quiestce.domain.Game.class.getName() + ".winners");
+            createCache(cm, be.vandenn3.quiestce.domain.Message.class.getName());
+            createCache(cm, be.vandenn3.quiestce.domain.Message.class.getName() + ".games");
+            createCache(cm, be.vandenn3.quiestce.domain.Message.class.getName() + ".authors");
+            createCache(cm, be.vandenn3.quiestce.domain.Game.class.getName() + ".nextTurnPlayers");
+            createCache(cm, be.vandenn3.quiestce.domain.Room.class.getName() + ".player1s");
+            createCache(cm, be.vandenn3.quiestce.domain.Room.class.getName() + ".player2s");
+            createCache(cm, be.vandenn3.quiestce.domain.GameCard.class.getName());
+            createCache(cm, be.vandenn3.quiestce.domain.GameCard.class.getName() + ".games");
+            createCache(cm, be.vandenn3.quiestce.domain.GameCard.class.getName() + ".themeCards");
             // jhipster-needle-ehcache-add-entry
         };
     }
