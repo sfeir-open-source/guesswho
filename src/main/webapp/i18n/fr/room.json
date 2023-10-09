@@ -1,0 +1,25 @@
+{
+  "quiestceApp": {
+    "room": {
+      "home": {
+        "title": "Rooms",
+        "refreshListLabel": "Actualiser la liste",
+        "createLabel": "Créer un nouveau Room",
+        "createOrEditLabel": "Créer ou éditer un Room",
+        "notFound": "Aucun Room trouvé"
+      },
+      "created": "Un nouveau Room a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Room avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Room avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Êtes-vous certain de vouloir supprimer le Room {{ id }} ?"
+      },
+      "detail": {
+        "title": "Room"
+      },
+      "id": "ID",
+      "name": "Name",
+      "code": "Code"
+    }
+  }
+}

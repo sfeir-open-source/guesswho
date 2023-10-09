@@ -50,6 +50,7 @@ public class CacheConfiguration {
             createCache(cm, be.vandenn3.quiestce.domain.User.class.getName() + ".authorities");
             createCache(cm, be.vandenn3.quiestce.domain.PersistentToken.class.getName());
             createCache(cm, be.vandenn3.quiestce.domain.User.class.getName() + ".persistentTokens");
+            createCache(cm, be.vandenn3.quiestce.domain.Room.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }
