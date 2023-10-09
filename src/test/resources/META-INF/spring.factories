@@ -1,0 +1,2 @@
+org.springframework.test.context.ContextCustomizerFactory = be.vandenn3.\
+    quiestce.config.SqlTestContainersSpringContextCustomizerFactory
