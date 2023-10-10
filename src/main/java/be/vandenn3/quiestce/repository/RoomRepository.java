@@ -1,5 +1,6 @@
 package be.vandenn3.quiestce.repository;
 
+import be.vandenn3.quiestce.domain.Player;
 import be.vandenn3.quiestce.domain.Room;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +26,10 @@ public interface RoomRepository extends JpaRepository<Room, Long> {
     default Page<Room> findAllWithEagerRelationships(Pageable pageable) {
         return this.findAllWithToOneRelationships(pageable);
     }
+
+    @Query("select room from Room room left join fetch room.player1 left join fetch room.player2 where room.player1=:player1 or room.player2=:player2")
+    List<Room> findAllByPlayer1OrPlayer2(@Param("player1") Player player1, @Param("player2") Player player2);
+    List<Room> findAllByCode(String code);
 
     @Query(
         value = "select room from Room room left join fetch room.player1 left join fetch room.player2",

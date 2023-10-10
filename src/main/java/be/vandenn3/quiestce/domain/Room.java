@@ -24,6 +24,7 @@ public class Room implements Serializable {
     private Long id;
 
     @NotNull
+    @NotBlank
     @Column(name = "name", nullable = false)
     private String name;
 
