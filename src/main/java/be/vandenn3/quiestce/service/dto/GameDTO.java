@@ -1,8 +1,8 @@
 package be.vandenn3.quiestce.service.dto;
 
-import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -24,6 +24,8 @@ public class GameDTO implements Serializable {
     private PlayerDTO winner;
 
     private PlayerDTO nextTurn;
+
+    private List<GameCardDTO> gameCards;
 
     public Long getId() {
         return id;
@@ -71,6 +73,14 @@ public class GameDTO implements Serializable {
 
     public void setWinner(PlayerDTO winner) {
         this.winner = winner;
+    }
+
+    public List<GameCardDTO> getGameCards() {
+        return gameCards;
+    }
+
+    public void setGameCards(List<GameCardDTO> gameCards) {
+        this.gameCards = gameCards;
     }
 
     public PlayerDTO getNextTurn() {

@@ -35,6 +35,9 @@ public interface ThemeCardRepository extends JpaRepository<ThemeCard, Long> {
     @Query("select themeCard from ThemeCard themeCard left join fetch themeCard.theme")
     List<ThemeCard> findAllWithToOneRelationships();
 
+    @Query("select themeCard from ThemeCard themeCard left join fetch themeCard.picture where themeCard.theme.id =:themeId")
+    List<ThemeCard> findAllByThemeId(@Param("themeId") Long themeId);
+    //    List<ThemeCard> findAllByThemeId(@Param("themeId") Long themeId);
     @Query("select themeCard from ThemeCard themeCard left join fetch themeCard.theme where themeCard.id =:id")
     Optional<ThemeCard> findOneWithToOneRelationships(@Param("id") Long id);
 }

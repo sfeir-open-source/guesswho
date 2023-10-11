@@ -219,7 +219,7 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
         if (!(o instanceof User)) {
             return false;
         }
-        return id != null && id.equals(((User) o).id);
+        return getId() != null && getId().equals(((User) o).getId());
     }
 
     @Override

@@ -37,7 +37,7 @@ public class RoomService {
 
     public List<RoomDTO> getRoomsFor(Player currentPlayer) {
         final List<Room> rooms = roomRepository.findAllByPlayer1OrPlayer2(currentPlayer, currentPlayer);
-        return rooms.stream().map(roomMapper::toDto).collect(Collectors.toList());
+        return roomMapper.toDto(rooms);
     }
 
     public RoomDTO joinRoom(String code, @NotNull Player currentPlayer) {
@@ -49,8 +49,8 @@ public class RoomService {
             throw new AccessDeniedException("bad code");
         }
         Room room = rooms.get(0);
-        Boolean player1IsCurrentUser = Objects.nonNull(room.getPlayer1()) && room.getPlayer1().getId().equals(currentPlayer.getId());
-        Boolean player2IsCurrentUser = Objects.nonNull(room.getPlayer2()) && room.getPlayer2().getId().equals(currentPlayer.getId());
+        Boolean player1IsCurrentUser = Objects.nonNull(room.getPlayer1()) && room.getPlayer1().equals(currentPlayer);
+        Boolean player2IsCurrentUser = Objects.nonNull(room.getPlayer2()) && room.getPlayer2().equals(currentPlayer);
         if (player1IsCurrentUser || player2IsCurrentUser) {
             throw new AccessDeniedException("player is already in the room");
         }

@@ -26,6 +26,8 @@ public interface GameCardRepository extends JpaRepository<GameCard, Long> {
         return this.findAllWithToOneRelationships(pageable);
     }
 
+    List<GameCard> findAllByGameId(Long gameId);
+
     @Query(
         value = "select gameCard from GameCard gameCard left join fetch gameCard.themeCard",
         countQuery = "select count(gameCard) from GameCard gameCard"

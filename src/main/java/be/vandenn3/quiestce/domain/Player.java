@@ -1,10 +1,11 @@
 package be.vandenn3.quiestce.domain;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
-import java.io.Serializable;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import java.io.Serializable;
 
 /**
  * A Player.
@@ -14,7 +15,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class Player implements Serializable {
-
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -91,6 +91,16 @@ public class Player implements Serializable {
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
+    public int getIndexFor(Room room) {
+        if(this.equals(room.getPlayer1())) {
+            return 1;
+        } else if (this.equals(room.getPlayer2())) {
+            return 2;
+        } else {
+            throw new IllegalStateException("current player not part of the game");
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -99,7 +109,7 @@ public class Player implements Serializable {
         if (!(o instanceof Player)) {
             return false;
         }
-        return id != null && id.equals(((Player) o).id);
+        return getId() != null && getId().equals(((Player) o).getId());
     }
 
     @Override

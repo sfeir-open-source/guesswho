@@ -26,5 +26,6 @@ public interface ThemeCardMapper extends EntityMapper<ThemeCardDTO, ThemeCard> {
     @Named("pictureId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "path", source = "path")
     PictureDTO toDtoPictureId(Picture picture);
 }

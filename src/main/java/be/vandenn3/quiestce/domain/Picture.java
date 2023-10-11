@@ -65,7 +65,7 @@ public class Picture implements Serializable {
         if (!(o instanceof Picture)) {
             return false;
         }
-        return id != null && id.equals(((Picture) o).id);
+        return getId() != null && getId().equals(((Picture) o).getId());
     }
 
     @Override

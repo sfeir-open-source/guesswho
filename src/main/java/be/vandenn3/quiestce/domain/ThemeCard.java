@@ -101,7 +101,7 @@ public class ThemeCard implements Serializable {
         if (!(o instanceof ThemeCard)) {
             return false;
         }
-        return id != null && id.equals(((ThemeCard) o).id);
+        return getId() != null && getId().equals(((ThemeCard) o).getId());
     }
 
     @Override

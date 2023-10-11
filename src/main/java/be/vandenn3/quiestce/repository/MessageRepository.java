@@ -26,6 +26,10 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
         return this.findAllWithToOneRelationships(pageable);
     }
 
+    List<Message> findAllByGameId(Long gameId);
+
+    List<Message> findAllByGameIdAndIdGreaterThan(Long gameId, Long id);
+
     @Query(
         value = "select message from Message message left join fetch message.author",
         countQuery = "select count(message) from Message message"

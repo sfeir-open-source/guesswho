@@ -44,8 +44,7 @@ public class Game implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private Player winner;
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne()
     private Player nextTurn;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
@@ -151,7 +150,7 @@ public class Game implements Serializable {
         if (!(o instanceof Game)) {
             return false;
         }
-        return id != null && id.equals(((Game) o).id);
+        return getId() != null && getId().equals(((Game) o).getId());
     }
 
     @Override

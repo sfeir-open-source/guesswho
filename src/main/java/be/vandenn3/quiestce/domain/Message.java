@@ -119,7 +119,7 @@ public class Message implements Serializable {
         if (!(o instanceof Message)) {
             return false;
         }
-        return id != null && id.equals(((Message) o).id);
+        return getId() != null && getId().equals(((Message) o).getId());
     }
 
     @Override

@@ -18,6 +18,16 @@ public class GameCard implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public GameCard(Game game, ThemeCard themeCard) {
+        this.game = game;
+        this.themeCard = themeCard;
+        this.player1_chosen = false;
+        this.player2_chosen = false;
+        this.player1_discarded = false;
+        this.player2_discarded = false;
+    }
+    public GameCard() {};
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
@@ -145,6 +155,36 @@ public class GameCard implements Serializable {
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
+    public boolean hasPlayerDiscarded(int playerIndex) {
+        if(playerIndex == 1) {
+            return this.player1_discarded;
+        } else if (playerIndex == 2) {
+            return this.player2_discarded;
+        } else {
+            throw new IllegalStateException("current player not part of the game");
+        }
+    }
+
+    public boolean hasPlayerChosen(int playerIndex) {
+        if(playerIndex == 1) {
+            return this.player1_chosen;
+        } else if (playerIndex == 2) {
+            return this.player2_chosen;
+        } else {
+            throw new IllegalStateException("current player not part of the game");
+        }
+    }
+
+    public void setPlayerDiscarded(int playerIndex, boolean value) {
+        if(playerIndex == 1) {
+            this.player1_discarded = value;
+        } else if (playerIndex == 2) {
+            this.player2_discarded = value;
+        } else {
+            throw new IllegalStateException("current player not part of the game");
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -153,7 +193,7 @@ public class GameCard implements Serializable {
         if (!(o instanceof GameCard)) {
             return false;
         }
-        return id != null && id.equals(((GameCard) o).id);
+        return getId() != null && getId().equals(((GameCard) o).getId());
     }
 
     @Override

@@ -3,6 +3,8 @@ package be.vandenn3.quiestce.domain;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
+import java.util.Objects;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -107,6 +109,24 @@ public class Room implements Serializable {
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
+    public boolean isPlayer1(Player player) {
+        return Objects.nonNull(player) && player.equals(this.getPlayer1());
+    }
+
+    public boolean isPlayer2(Player player) {
+        return Objects.nonNull(player) && player.equals(this.getPlayer2());
+    }
+
+    public Player getOtherPlayer(Player player) {
+        if (isPlayer1(player)) {
+            return this.getPlayer2();
+        } else if (isPlayer2(player)) {
+            return this.getPlayer1();
+        } else {
+            throw new IllegalArgumentException("given player is not part of this game");
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -115,7 +135,7 @@ public class Room implements Serializable {
         if (!(o instanceof Room)) {
             return false;
         }
-        return id != null && id.equals(((Room) o).id);
+        return getId() != null && getId().equals(((Room) o).getId());
     }
 
     @Override

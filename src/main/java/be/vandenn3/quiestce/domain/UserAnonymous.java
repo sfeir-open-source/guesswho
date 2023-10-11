@@ -82,7 +82,7 @@ public class UserAnonymous implements Serializable {
         if (!(o instanceof UserAnonymous)) {
             return false;
         }
-        return id != null && id.equals(((UserAnonymous) o).id);
+        return getId() != null && getId().equals(((UserAnonymous) o).getId());
     }
 
     @Override

@@ -9,10 +9,12 @@ import be.vandenn3.quiestce.service.MailService;
 import be.vandenn3.quiestce.service.UserService;
 import be.vandenn3.quiestce.service.dto.AdminUserDTO;
 import be.vandenn3.quiestce.service.dto.PasswordChangeDTO;
+import be.vandenn3.quiestce.session.CurrentPlayerManager;
 import be.vandenn3.quiestce.web.rest.errors.*;
 import be.vandenn3.quiestce.web.rest.vm.KeyAndPasswordVM;
 import be.vandenn3.quiestce.web.rest.vm.ManagedUserVM;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
@@ -45,17 +47,20 @@ public class AccountResource {
 
     private final MailService mailService;
 
+    private final CurrentPlayerManager currentPlayerManager;
+
     private final PersistentTokenRepository persistentTokenRepository;
 
     public AccountResource(
         UserRepository userRepository,
         UserService userService,
         MailService mailService,
-        PersistentTokenRepository persistentTokenRepository
+        CurrentPlayerManager currentPlayerManager, PersistentTokenRepository persistentTokenRepository
     ) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
+        this.currentPlayerManager = currentPlayerManager;
         this.persistentTokenRepository = persistentTokenRepository;
     }
 
@@ -101,6 +106,12 @@ public class AccountResource {
     public String isAuthenticated(HttpServletRequest request) {
         log.debug("REST request to check if the current user is authenticated");
         return request.getRemoteUser();
+    }
+
+    @GetMapping("/player")
+    public Long currentPlayer(HttpSession httpSession) {
+        log.debug("REST request to check if the current user is authenticated");
+        return currentPlayerManager.getCurrentPlayer(httpSession).getId();
     }
 
     /**

@@ -1,11 +1,5 @@
-id;name;code
-1;recommencer à travers de sorte que;commissionnaire solitaire
-2;de peur que ronron;a aux alentours de à force de
-3;proche;transformer ouah quasi
-4;respecter à travers;prestataire de services dring régler
-5;aussitôt que;simple foule membre à vie
-6;auparavant zzzz ça;cyan
-7;secours sitôt;bang étant donné que résulter
-8;en plus de;coupable
-9;prévoir;hausser ding doucement
-10;cot cot fade;à condition que badaboum coller
+id;name;code;player1_id;player2_id
+21;room21;code21;11;12
+22;room22;code22;11;13
+23;room23;code23;11;NULL
+24;room24;code24;12;NULL

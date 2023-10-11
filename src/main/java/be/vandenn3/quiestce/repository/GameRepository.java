@@ -26,6 +26,9 @@ public interface GameRepository extends JpaRepository<Game, Long> {
         return this.findAllWithToOneRelationships(pageable);
     }
 
+    List<Game> findAllByRoomId(Long roomId);
+    List<Game> findAllByRoomIdAndWinnerIsNull(Long roomId);
+
     @Query(
         value = "select game from Game game left join fetch game.room left join fetch game.theme left join fetch game.winner left join fetch game.nextTurn",
         countQuery = "select count(game) from Game game"

@@ -17,9 +17,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
-/**
- * REST controller for managing {@link be.vandenn3.quiestce.domain.Room}.
- */
 @RestController
 @RequestMapping("/api/rooms")
 public class RoomResource {

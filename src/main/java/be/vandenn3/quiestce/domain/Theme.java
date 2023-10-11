@@ -81,7 +81,7 @@ public class Theme implements Serializable {
         if (!(o instanceof Theme)) {
             return false;
         }
-        return id != null && id.equals(((Theme) o).id);
+        return getId() != null && getId().equals(((Theme) o).getId());
     }
 
     @Override
