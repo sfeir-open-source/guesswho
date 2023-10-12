@@ -62,7 +62,7 @@ public class GameResource {
     }
 
     @PostMapping("/{id}/play")
-    public GameDTO selectMyCard(@PathVariable Long id, @Valid @RequestBody PlayDTO playDTO, HttpSession httpSession) {
+    public GameDTO play(@PathVariable Long id, @Valid @RequestBody PlayDTO playDTO, HttpSession httpSession) {
         return gameService.play(id, playDTO.getGameCardIds(), currentPlayerManager.getCurrentPlayer(httpSession));
     }
 

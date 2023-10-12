@@ -24,64 +24,23 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/**
- * Integration tests for the {@link RoomResource} REST controller.
- */
 class RoomResourceIT extends IntegrationTestBase {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
-    private static final String UPDATED_NAME = "BBBBBBBBBB";
-
-    private static final String DEFAULT_CODE = "AAAAAAAAAA";
-    private static final String UPDATED_CODE = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/rooms";
-    private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private RoomRepository roomRepository;
 
     @Autowired
-    private EntityManager em;
-
-    @Autowired
     private MockMvc restRoomMockMvc;
-
-    private Room room;
-
-    /**
-     * Create an entity for this test.
-     * <p>
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static Room createEntity(EntityManager em) {
-        Room room = new Room().name(DEFAULT_NAME).code(DEFAULT_CODE);
-        return room;
-    }
-
-    /**
-     * Create an updated entity for this test.
-     * <p>
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static Room createUpdatedEntity(EntityManager em) {
-        Room room = new Room().name(UPDATED_NAME).code(UPDATED_CODE);
-        return room;
-    }
-
-    @BeforeEach
-    public void initTest() {
-        room = createEntity(em);
-    }
 
     @Test
     @Transactional
     void createRoom() throws Exception {
         int databaseSizeBeforeCreate = roomRepository.findAll().size();
-        // Create the Room
+
         RoomCreationDTO roomDTO = new RoomCreationDTO();
         roomDTO.setName(DEFAULT_NAME);
         restRoomMockMvc
@@ -93,7 +52,6 @@ class RoomResourceIT extends IntegrationTestBase {
             )
             .andExpect(status().isCreated());
 
-        // Validate the Room in the database
         List<Room> roomList = roomRepository.findAll();
         assertThat(roomList).hasSize(databaseSizeBeforeCreate + 1);
         Room testRoom = roomList.get(roomList.size() - 1);
@@ -173,7 +131,7 @@ class RoomResourceIT extends IntegrationTestBase {
     @Test
     void joinRoomWithBadCode() throws Exception {
         Player player1 = createValidPlayer("player1");
-        Room room = roomRepository.save(new Room().name("room").player1(player1).code("tmp"));
+        roomRepository.save(new Room().name("room").player1(player1).code("tmp"));
         restRoomMockMvc
             .perform(
                 post(ENTITY_API_URL + "/join/" + "bad-code").sessionAttrs(sessionattr)

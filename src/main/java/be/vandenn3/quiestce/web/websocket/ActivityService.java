@@ -14,7 +14,7 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
-@Controller
+//@Controller
 public class ActivityService implements ApplicationListener<SessionDisconnectEvent> {
 
     private static final Logger log = LoggerFactory.getLogger(ActivityService.class);

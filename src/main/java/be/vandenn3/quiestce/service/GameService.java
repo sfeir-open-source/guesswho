@@ -120,6 +120,9 @@ public class GameService {
         if (!hasGameBegun(game)) {
             throw new AccessDeniedException("cannot play - game has not started yet");
         }
+        if (hasGameEnded(game)) {
+            throw new AccessDeniedException("cannot play - game is finished");
+        }
 
         List<GameCard> allGameCards = gameCardRepository.findAllByGameId(game.getId());
         if (gameCardIds.stream().anyMatch(id -> allGameCards.stream().map(GameCard::getId).noneMatch(id::equals))) {
@@ -142,8 +145,9 @@ public class GameService {
         List<GameCard> updatedList = gameCardRepository.findAllByGameId(game.getId());
         List<GameCard> leftCards = updatedList.stream().filter(card -> !card.hasPlayerDiscarded(currentPlayerIndex)).toList();
         if (leftCards.size() <= 1) {
-            GameCard otherPlayerChosenCard = updatedList.stream().filter(card -> card.hasPlayerChosen(currentPlayerIndex)).findAny().orElseThrow();
-            if (leftCards.isEmpty() || leftCards.get(0).equals(otherPlayerChosenCard)) {
+            int otherPlayerIndex = game.getRoom().getOtherPlayer(currentPlayer).getIndexFor(game.getRoom());
+            GameCard otherPlayerChosenCard = updatedList.stream().filter(card -> card.hasPlayerChosen(otherPlayerIndex)).findAny().orElseThrow();
+            if (!leftCards.isEmpty() && leftCards.get(0).equals(otherPlayerChosenCard)) {
                 setWinner(currentPlayer, game);
             } else {
                 setWinner(game.getRoom().getOtherPlayer(currentPlayer), game);
@@ -199,6 +203,10 @@ public class GameService {
 
     private boolean hasGameBegun(Game game) {
         return Objects.nonNull(game.getNextTurn());
+    }
+
+    private boolean hasGameEnded(Game game) {
+        return Objects.nonNull(game.getWinner());
     }
 
     private boolean areBothPlayersThere(Room room) {

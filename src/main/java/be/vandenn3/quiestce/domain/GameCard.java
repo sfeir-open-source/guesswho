@@ -50,7 +50,7 @@ public class GameCard implements Serializable {
     @Column(name = "player_2_discarded", nullable = false)
     private Boolean player2_discarded;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, cascade = CascadeType.REMOVE)
     @NotNull
     @JsonIgnoreProperties(value = { "room", "theme", "winner", "nextTurn" }, allowSetters = true)
     private Game game;

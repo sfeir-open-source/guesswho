@@ -13,6 +13,7 @@
                                  constraintName="fk_game_card__game_id"
                                  referencedColumnNames="id"
                                  referencedTableName="game"
+                                 onDelete="CASCADE"
                                  />
 
         <addForeignKeyConstraint baseColumnNames="theme_card_id"
