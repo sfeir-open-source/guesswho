@@ -1,0 +1,11 @@
+<h2>Mes rooms</h2>
+
+<button class="btn btn-primary btn-lg">Créer une room</button>
+
+<div class="row" *ngIf="(rooms$ | async) as rooms">
+  <div class="col-md-3 m-4 p-3 border-primary border" *ngFor="let room of rooms">
+    <h3>{{room.name}}</h3>
+    <button class="btn btn-primary" [routerLink]="['/room/', room.id]" >Ouvrir</button>
+  </div>
+  <div *ngIf="rooms.length === 0">Vous n'avez pas encore de room.</div>
+</div>

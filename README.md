@@ -1,4 +1,51 @@
-# quiestce
+# Qui est-ce
+
+## How to add a theme
+
+TODO
+
+
+## TO DO
+
+Features:
+
+    - let anonymous users join rooms (using existing user_anonymous entity)
+    - login using Google
+    - play against AI (an AI will just be another type of "player" entity, that will react to application events).
+    - display the total score of a room (total of the games from this room)
+
+
+Technical improvements / fixes:
+
+    - BEFORE DEPLOYMENT: remove default accounts :)
+    - BEFORE DEPLOYMENT: re-check security (headers, csrf, default configs, check jhipster security page)
+    - backend:
+        - replace some of the AccessDeniedException (403) by a BadRequestException (400)
+        - make sure no stack traces are sent to frontend (e.g. in case of error 500)
+        - use web sockets for game status updates (new message, other player played) => less data transmitted
+        - refactoring: avoid fields player1,player2, better use a table (easier to factorise the code)
+        - hibernate - check that queries are efficient (no N+1 issue ?)
+        - add endpoint GET /api/room/{id}
+        - GET /api/games: return less data (do not return all cards), details can be retrieved through /api/games/{id}
+    - frontend:
+        - add a store
+
+
+## Dev guide
+
+- Start backend only: ./mvnw -P-webapp
+- Start frontend only: npm start
+- Login: http://localhost:8080
+- Access swagger: http://localhost:8080/swagger-ui/index.html
+- Generate entity using jhipster: npx jhipster entity --skip-client ENTITYNAME
+
+Notes:
+
+    - when updating initial database schema or fake data, you should delete target/h2db folder in case you have issues
+
+
+
+# Original JHipster README:
 
 This application was generated using JHipster 8.0.0-beta.3, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v8.0.0-beta.3](https://www.jhipster.tech/documentation-archive/v8.0.0-beta.3).
 

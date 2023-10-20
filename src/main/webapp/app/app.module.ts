@@ -22,6 +22,7 @@ import MainComponent from './layouts/main/main.component';
 import MainModule from './layouts/main/main.module';
 import { AppPageTitleStrategy } from './app-page-title-strategy';
 import { TrackerService } from './core/tracker/tracker.service';
+import { RoomComponent } from './quiestce/feature/room/room.component';
 
 @NgModule({
   imports: [
@@ -43,6 +44,9 @@ import { TrackerService } from './core/tracker/tracker.service';
     { provide: TitleStrategy, useClass: AppPageTitleStrategy },
   ],
   bootstrap: [MainComponent],
+  declarations: [
+    RoomComponent
+  ],
 })
 export class AppModule {
   constructor(

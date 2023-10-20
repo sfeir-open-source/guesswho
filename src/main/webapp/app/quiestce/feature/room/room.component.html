@@ -1,0 +1,27 @@
+<div *ngIf="room$ | async as room">
+  <h1>{{room.name}}</h1>
+
+  <p>Membres de la room:</p>
+  <ul>
+    <li>{{room.player1.pseudo}}</li>
+    <li *ngIf="room.player2">{{room.player2.pseudo}}</li>
+  </ul>
+
+  <div *ngIf="!room.player2">
+    Code d'invitation de la room: <b>{{room.code}}</b>
+  </div>
+
+  <div *ngIf="room.player2">
+    <h2>Parties</h2>
+
+    <button class="btn btn-primary btn-lg">Lancer une nouvelle partie</button>
+
+    <div class="row" *ngIf="(games$ | async) as games">
+      <div class="col-md-3 m-4 p-3 border-primary border" *ngFor="let game of games; let i = index">
+        <h3>Partie {{games.length - i}}</h3>
+        <button class="btn btn-primary" [routerLink]="['/game/', game.id]" >Ouvrir</button>
+      </div>
+      <div *ngIf="games.length === 0">Vous n'avez pas encore de partie dans cette room.</div>
+    </div>
+  </div>
+</div>
