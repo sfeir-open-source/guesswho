@@ -1,0 +1,11 @@
+<div class="row" *ngIf="(gameCards$ | async) as gameCards">
+  <div *ngIf="(cardsPaths$ |async) as cardsPaths">
+    <div class="m-1 p-3 border-primary border board-card" *ngFor="let gameCard of gameCards"
+         [class.selected]="selectedCardsIds.indexOf(gameCard.id) !== -1"
+         [class.disabled]="disabledCardsIds.indexOf(gameCard.id) !== -1"
+         (click)="clickOnCard(gameCard.id)" style="cursor: pointer;width: 170px;float:left;min-height:220px">
+      <h3 style="font-size: 16px;">{{gameCard.themeCard.name}}</h3>
+      <img src="/content/images/themes/{{cardsPaths[gameCard.id] | async}}" alt="" width="140px">
+    </div>
+  </div>
+</div>

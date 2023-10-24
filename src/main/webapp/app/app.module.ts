@@ -22,7 +22,16 @@ import MainComponent from './layouts/main/main.component';
 import MainModule from './layouts/main/main.module';
 import { AppPageTitleStrategy } from './app-page-title-strategy';
 import { TrackerService } from './core/tracker/tracker.service';
-import { RoomComponent } from './quiestce/feature/room/room.component';
+import { RoomComponent } from './quiestce/page/room/room.component';
+import { NewRoomComponent } from './quiestce/page/new-room/new-room.component';
+import {FormsModule} from "@angular/forms";
+import SharedModule from "./shared/shared.module";
+import { NewGameComponent } from './quiestce/page/new-game/new-game.component';
+import { GameComponent } from './quiestce/page/game/game.component';
+import { JoinRoomComponent } from './quiestce/page/join-room/join-room.component';
+import { GameBoardComponent } from './quiestce/page/game/component/game-board/game-board.component';
+import { SelectOwnCardComponent } from './quiestce/page/game/component/select-own-card/select-own-card.component';
+import { RunningGameComponent } from './quiestce/page/game/component/running-game/running-game.component';
 
 @NgModule({
   imports: [
@@ -30,7 +39,7 @@ import { RoomComponent } from './quiestce/feature/room/room.component';
     // jhipster-needle-angular-add-module JHipster will add new module here
     AppRoutingModule,
     // Set this to true to enable service worker (PWA)
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: false }),
+    ServiceWorkerModule.register('ngsw-worker.js', {enabled: false}),
     HttpClientModule,
     MainModule,
     TranslationModule,
@@ -44,9 +53,7 @@ import { RoomComponent } from './quiestce/feature/room/room.component';
     { provide: TitleStrategy, useClass: AppPageTitleStrategy },
   ],
   bootstrap: [MainComponent],
-  declarations: [
-    RoomComponent
-  ],
+  declarations: [],
 })
 export class AppModule {
   constructor(

@@ -1,0 +1,16 @@
+<form role="form" (ngSubmit)="joinRoom()">
+  <h1>Rejoindre une room</h1>
+
+  <div class="mb-3">
+    <label>Code</label>
+    <input type="text" class="form-control" name="name" [(ngModel)]="roomCode" />
+  </div>
+  <small class="form-text text-danger" *ngIf="isCodeInvalid">
+    Le code est invalide.
+  </small>
+
+  <button type="submit" class="btn btn-primary" [disabled]="this.roomCode.trim() === ''">
+    <fa-icon icon="save"></fa-icon>&nbsp;<span>Rejoindre</span>
+  </button>
+
+</form>

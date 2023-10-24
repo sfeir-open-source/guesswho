@@ -7,7 +7,7 @@ import SharedModule from 'app/shared/shared.module';
 import { AccountService } from 'app/core/auth/account.service';
 import { Account } from 'app/core/auth/account.model';
 import {NgSwitchCase} from "@angular/common";
-import {RoomsListComponent} from "../quiestce/feature/rooms-list/rooms-list.component";
+import {RoomsListComponent} from "../quiestce/page/rooms-list/rooms-list.component";
 
 @Component({
   standalone: true,

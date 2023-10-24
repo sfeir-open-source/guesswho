@@ -1,0 +1,6 @@
+<p>Sélectionnez votre carte:</p>
+
+<game-board
+  [gameCards$]="gameCards$"
+  [themeCards$]="themeCards$"
+  (clickedCardId)="clickOnCardHandler($event)"></game-board>

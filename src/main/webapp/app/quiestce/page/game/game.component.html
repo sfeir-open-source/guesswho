@@ -1,0 +1,14 @@
+<div class="row">
+  <div class="col-8">
+    <button class="btn btn-primary" [routerLink]="['../..']">Retour à la room</button>
+
+    <select-own-card *ngIf="shouldSelectCard$ | async"></select-own-card>
+
+    <running-game *ngIf="hasGameStarted$ | async"></running-game>
+
+    <p *ngIf="isWaitingForOtherPlayerToChooseCard$ | async">En attente du choix de l'autre joueur</p>
+
+    <p *ngIf="!(shouldSelectCard$ | async) && !(isWaitingForOtherPlayerToChooseCard$ | async) && !(hasGameStarted$ | async)">En attente des données du serveur</p>
+  </div>
+  <chat class="col-4"></chat>
+</div>

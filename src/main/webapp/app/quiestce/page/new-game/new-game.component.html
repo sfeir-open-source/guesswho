@@ -1,0 +1,12 @@
+<h1>Nouvelle partie</h1>
+
+<p>Choisissez le thème:</p>
+
+<div class="row" *ngIf="(themes$ | async) as themes">
+  <div class="col-md-5 col-10 m-4 p-3 border-primary border" *ngFor="let theme of themes">
+    <h3>{{theme.name}}</h3>
+    <img src="/content/images/themes/{{theme.main_picture.path}}" alt="" width="180px">
+    <button class="btn btn-primary" (click)="createGame(theme.id)" >Choisir</button>
+  </div>
+  <div *ngIf="themes.length === 0">Aucun thème n'est configuré sur cette installation.</div>
+</div>

@@ -1,0 +1,12 @@
+<form role="form" (ngSubmit)="createRoom()">
+  <h1>Créer une room</h1>
+
+  <div class="mb-3">
+    <label>Nom</label>
+    <input type="text" class="form-control" name="name" [(ngModel)]="newRoomName" />
+  </div>
+
+  <button type="submit" class="btn btn-primary" [disabled]="this.newRoomName.trim() === ''">
+    <fa-icon icon="save"></fa-icon>&nbsp;<span>Créer</span>
+  </button>
+</form>

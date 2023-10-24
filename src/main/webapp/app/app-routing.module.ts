@@ -37,7 +37,7 @@ import LoginComponent from './login/login.component';
         },
         ...errorRoute,
       ],
-      { enableTracing: DEBUG_INFO_ENABLED, bindToComponentInputs: true },
+      { enableTracing: false /*DEBUG_INFO_ENABLED*/, bindToComponentInputs: true },
     ),
   ],
   exports: [RouterModule],

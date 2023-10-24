@@ -1,0 +1,15 @@
+<div style="height:500px; border: 1px solid #eee; padding: 10px; position:relative" *ngIf="currentPlayer$ | async as currentPlayerId">
+  <div style="height:450px;overflow-y:auto;padding-right:10px" id="messages-list">
+    <div *ngFor="let message of (messages$ | async)" [class.current-user]="message.author.id===currentPlayerId">
+      <p>{{message.content}}</p>
+      <p style="font-size: 14px;margin-top:-12px">{{message.author.id===currentPlayerId ? "moi" : message.author.pseudo}}</p>
+    </div>
+  </div>
+  <div style="position:absolute;bottom:5px;display:flex;background-color:white;z-index: 1000">
+    <input placeholder="Envoyer un message" class="form-control" (keyup.enter)="sendMessage()" [(ngModel)]="newMessage" style="margin-bottom: 3px;margin-right:4px"/>
+    <button type="submit" class="btn btn-primary" style="float:left;display:inline-block !important;"
+            (click)="sendMessage()" [disabled]="this.newMessage.trim() === '' || this.sending">
+      <fa-icon icon="paper-plane"></fa-icon>
+    </button>
+  </div>
+</div>

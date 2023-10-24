@@ -8,12 +8,14 @@ TODO
 ## TO DO
 
 Features:
-
+    
+    - make the interface mobile-friendly (responsive)
     - let anonymous users join rooms (using existing user_anonymous entity)
     - login using Google
     - play against AI (an AI will just be another type of "player" entity, that will react to application events).
-    - display the total score of a room (total of the games from this room)
-
+    - display the total score of a room (total of the games from this room) 
+    - add descriptions to cards (to be used in <img> alt attribute)
+    - button to end a game (no one wins, and a new game can be started - useful if you do not end a game and come back some days later)
 
 Technical improvements / fixes:
 
@@ -27,8 +29,14 @@ Technical improvements / fixes:
         - hibernate - check that queries are efficient (no N+1 issue ?)
         - add endpoint GET /api/room/{id}
         - GET /api/games: return less data (do not return all cards), details can be retrieved through /api/games/{id}
+        - /api/themes/{id} should return an object, not the array of theme cards
     - frontend:
+        - add tests
+        - refactor game service => simplify observables & data refresh
+        - improve error management (if play() request fails, display/explain error)
         - add a store
+        - update code structure: get rid of JHipster (for frontend)
+        - move ineline css to scss files
 
 
 ## Dev guide

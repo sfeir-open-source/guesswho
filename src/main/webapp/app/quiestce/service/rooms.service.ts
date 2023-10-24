@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Room} from "../domain/Room.model";
 import {Observable, switchMap} from "rxjs";
 import {filter, map} from "rxjs/operators";
+import {Game} from "../domain/Game.model";
 
 @Injectable({
   providedIn: 'root'
@@ -24,5 +25,24 @@ export class RoomsService {
       }
       return room;
     }));
+  }
+
+  public createRoom$(name: string): Observable<Room> {
+    return this.http.post<Room>("/api/rooms", { name });
+  }
+
+  public joinRoom$(code: string): Observable<Room> {
+    return this.http.post<Room>(`/api/rooms/join/${code}`, {});
+  }
+
+  public getGames$(roomId: number): Observable<Game[]> {
+    return this.http.get<Game[]>(`/api/games?roomId=${roomId}`);
+  }
+
+  public createGame$(roomId: number, themeId: number): Observable<Game> {
+    return this.http.post<Game>(`/api/games`, {
+      roomId,
+      themeId
+    });
   }
 }

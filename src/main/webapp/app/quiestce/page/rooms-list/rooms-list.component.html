@@ -1,6 +1,7 @@
 <h2>Mes rooms</h2>
 
-<button class="btn btn-primary btn-lg">Créer une room</button>
+<button class="btn btn-primary btn-lg" [routerLink]="['/room/new']">Créer une room</button>
+<button class="btn btn-primary btn-lg" [routerLink]="['/room/join']">Rejoindre une room</button>
 
 <div class="row" *ngIf="(rooms$ | async) as rooms">
   <div class="col-md-3 m-4 p-3 border-primary border" *ngFor="let room of rooms">
