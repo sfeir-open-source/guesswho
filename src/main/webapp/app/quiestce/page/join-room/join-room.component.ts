@@ -27,7 +27,7 @@ export class JoinRoomComponent implements OnDestroy{
   public constructor(private roomsService: RoomsService, private route: ActivatedRoute, private router: Router) {
   }
 
-  public joinRoom() {
+  public joinRoom(): void {
     this.subscriptions.add(this.roomsService.joinRoom$(this.roomCode).pipe(catchError(() => {
       this.isCodeInvalid = true;
       return EMPTY;
@@ -37,7 +37,7 @@ export class JoinRoomComponent implements OnDestroy{
     })).subscribe());
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 }

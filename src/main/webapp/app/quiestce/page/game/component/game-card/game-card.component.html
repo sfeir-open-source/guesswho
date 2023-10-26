@@ -1,0 +1,8 @@
+<div
+     *ngIf="(cardsPaths$ | async) as cardsPaths" class="board-card border-primary border board-card"
+     [class.selected]="isSelected"
+     [class.disabled]="isDisabled"
+     (click)="clickOnCard.emit()" style="cursor: pointer;width: 170px;min-height:220px">
+  <h3 style="font-size: 16px;">{{gameCard?.themeCard?.name}}</h3>
+  <img src="/content/images/themes/{{cardsPaths[gameCard!.id] | async}}" draggable="false" alt="" width="140px">
+</div>

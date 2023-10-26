@@ -5,6 +5,7 @@ import {CommonModule, NgOptimizedImage} from "@angular/common";
 import {map} from "rxjs/operators";
 import {ThemeCard} from "../../../../domain/ThemeCard.model";
 import {GameService} from "../../service/game.service";
+import {GameCardComponent} from "../game-card/game-card.component";
 
 @Component({
   standalone: true,
@@ -12,7 +13,8 @@ import {GameService} from "../../service/game.service";
   templateUrl: './game-board.component.html',
   imports: [
     CommonModule,
-    NgOptimizedImage
+    NgOptimizedImage,
+    GameCardComponent
   ],
   styleUrls: ['./game-board.component.scss']
 })
@@ -23,12 +25,7 @@ export class GameBoardComponent {
   @Input() disabledCardsIds: number[] = [];
   @Output() clickedCardId = new EventEmitter<number>();
 
-  cardsPaths$ = this.gameService.cardsPaths$;
-
-  constructor(private gameService: GameService) {
-  }
-
-  protected clickOnCard(gameCardId: number) {
+  protected clickOnCard(gameCardId: number): void {
     if (!(gameCardId in this.disabledCardsIds)) {
       this.clickedCardId.emit(gameCardId);
     }

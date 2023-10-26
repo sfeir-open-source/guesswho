@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { DEBUG_INFO_ENABLED } from 'app/app.constants';
 import { errorRoute } from './layouts/error/error.route';
 
 import HomeComponent from './home/home.component';
@@ -37,7 +36,7 @@ import LoginComponent from './login/login.component';
         },
         ...errorRoute,
       ],
-      { enableTracing: false /*DEBUG_INFO_ENABLED*/, bindToComponentInputs: true },
+      { enableTracing: false, bindToComponentInputs: true },
     ),
   ],
   exports: [RouterModule],

@@ -2,20 +2,40 @@
 
 ## How to add a theme
 
-TODO
+Currently, it is not possible to add a theme using the interface, it must be done in the code and the project must be
+re-delivered. Follow these steps to add a theme:
+
+    1) Gather the images for your theme. You need one image for the theme overview, and then as many images as you want
+        for the cards.
+    2) In src/main/webapp/content/images/themes, create a folder for your theme (the name won't be visible for users).
+    3) Move all your images in this folder (including the overview image). Avoid spaces in the folder/file-names.
+    4) Open src/main/resources/config/liquibase/data/picture.csv, and add one line for each image  (including the
+        overview image) in the same format as existing lines. Use incrementing IDs (start from last existing one + 1).
+        The path is relative to src/main/webapp/content/images/themes/ (so <themeFolderName>/<imageName>).
+    5) Open src/main/resources/config/liquibase/data/theme.csv and add one line for your theme. For main_picture_id, use
+        the ID of the overview picture from picture.csv.
+    6) Open src/main/resources/config/liquibase/data/theme_card.csv, and add one line for each card. Use incrementing
+        IDs (start from last existing one + 1). theme_id is the ID from theme.csv, and picture_id is the ID from
+        picture.csv.
+    7) Delete target/h2db (the development database - it will be re-generated when starting the app locally).
+    8) That's it! You can now build and test the project.
 
 
-## TO DO
+
+## Roadmap - features & technical improvements
 
 Features:
-    
-    - make the interface mobile-friendly (responsive)
-    - let anonymous users join rooms (using existing user_anonymous entity)
+
     - login using Google
-    - play against AI (an AI will just be another type of "player" entity, that will react to application events).
-    - display the total score of a room (total of the games from this room) 
+    - make the interface mobile-friendly (responsive) and improve it so that all cards are visible without scrolling on desktop
+    - let the user undo a card removal (if he discarded it by mistake and notice afterwards)
+    - admin interface to add themes (and user interface to propose themes, that admin can validate ?)
+    - play against AI (an AI will just be another type of "player" entity, that will react to application-triggered events).
     - add descriptions to cards (to be used in <img> alt attribute)
+    - add copyright field for theme images (for instance https://devicon.dev/ for "programming-languages" theme) and display the copyright.
+    - let a user delete old rooms
     - button to end a game (no one wins, and a new game can be started - useful if you do not end a game and come back some days later)
+    - let anonymous users join rooms (using existing user_anonymous entity)
 
 Technical improvements / fixes:
 
@@ -24,19 +44,29 @@ Technical improvements / fixes:
     - backend:
         - replace some of the AccessDeniedException (403) by a BadRequestException (400)
         - make sure no stack traces are sent to frontend (e.g. in case of error 500)
-        - use web sockets for game status updates (new message, other player played) => less data transmitted
         - refactoring: avoid fields player1,player2, better use a table (easier to factorise the code)
         - hibernate - check that queries are efficient (no N+1 issue ?)
         - add endpoint GET /api/room/{id}
         - GET /api/games: return less data (do not return all cards), details can be retrieved through /api/games/{id}
         - /api/themes/{id} should return an object, not the array of theme cards
+        - create different DTOs for endpoints (currently full objects are returned with null fields - example:
+              /api/games: $.room.player1 is null => instead, just do not include this field in the response) 
+        - use web sockets for game status updates (new message, other player played) => less data transmitted
     - frontend:
-        - add tests
+        - the board interface is refreshed every two seconds. Update the code so that the HTML is not refreshed if not needed
+        - add tests (services, components)
         - refactor game service => simplify observables & data refresh
         - improve error management (if play() request fails, display/explain error)
         - add a store
         - update code structure: get rid of JHipster (for frontend)
         - move ineline css to scss files
+
+
+
+## Deployment guide
+
+TODO
+
 
 
 ## Dev guide
@@ -45,15 +75,19 @@ Technical improvements / fixes:
 - Start frontend only: npm start
 - Login: http://localhost:8080
 - Access swagger: http://localhost:8080/swagger-ui/index.html
-- Generate entity using jhipster: npx jhipster entity --skip-client ENTITYNAME
 
 Notes:
 
-    - when updating initial database schema or fake data, you should delete target/h2db folder in case you have issues
+    - when updating initial database schema or (fake) data, you should delete target/h2db folder in case you have issues
 
 
 
-# Original JHipster README:
+
+
+
+
+
+# JHipster default README
 
 This application was generated using JHipster 8.0.0-beta.3, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v8.0.0-beta.3](https://www.jhipster.tech/documentation-archive/v8.0.0-beta.3).
 

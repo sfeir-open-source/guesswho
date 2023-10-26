@@ -23,14 +23,12 @@ export class NewGameComponent implements OnDestroy {
   constructor(private themeService: ThemeService, private roomsService: RoomsService,
               private route: ActivatedRoute, private router: Router) {}
 
-  public createGame(themeId: number) {
-    const roomId = parseInt(this.route.snapshot.params["roomId"]);
-    this.subscriptions.add(this.roomsService.createGame$(roomId, themeId).pipe(switchMap(game => {
-      return this.router.navigate(["/room", roomId, "game", game.id]);
-    })).subscribe());
+  public createGame(themeId: number): void {
+    const roomId = parseInt(this.route.snapshot.params["roomId"], 10);
+    this.subscriptions.add(this.roomsService.createGame$(roomId, themeId).pipe(switchMap(game => this.router.navigate(["/room", roomId, "game", game.id]))).subscribe());
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 }

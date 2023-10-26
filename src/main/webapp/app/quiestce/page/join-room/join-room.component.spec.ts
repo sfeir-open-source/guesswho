@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { JoinRoomComponent } from './join-room.component';
+import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {RouterTestingModule} from "@angular/router/testing";
+import {IconsModule} from "../../../shared/test/icons-test.module";
 
 describe('JoinRoomComponent', () => {
   let component: JoinRoomComponent;
@@ -8,7 +11,7 @@ describe('JoinRoomComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [JoinRoomComponent]
+      imports: [JoinRoomComponent, HttpClientTestingModule, RouterTestingModule, IconsModule]
     });
     fixture = TestBed.createComponent(JoinRoomComponent);
     component = fixture.componentInstance;

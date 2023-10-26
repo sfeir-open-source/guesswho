@@ -1,0 +1,25 @@
+id;name;theme_id;picture_id
+9;Bash;3;11
+10;C;3;12
+11;Cobol;3;13
+12;C++;3;14
+13;C#;3;15
+14;Dart;3;16
+15;Erlang;3;17
+16;Fortran;3;18
+17;Go;3;19
+18;Haskell;3;20
+19;Java;3;21
+20;JavaScript;3;22
+21;Lisp;3;23
+22;Lua;3;24
+24;Objective C;3;26
+25;Perl;3;27
+26;PHP;3;28
+27;Prolog;3;29
+28;Python;3;30
+29;R;3;31
+30;Ruby;3;32
+31;Rust;3;33
+32;Swift;3;34
+33;Tex;3;35

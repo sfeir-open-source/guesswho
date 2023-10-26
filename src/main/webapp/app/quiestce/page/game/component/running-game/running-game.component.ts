@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {GameService} from "../../service/game.service";
 import {GameBoardComponent} from "../game-board/game-board.component";
-import {map} from "rxjs/operators";
-import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
-import {async, Subscription} from "rxjs";
+import {CommonModule} from "@angular/common";
+import {Subscription} from "rxjs";
+import {GameCardComponent} from "../game-card/game-card.component";
 
 @Component({
   standalone: true,
@@ -11,9 +11,8 @@ import {async, Subscription} from "rxjs";
   templateUrl: './running-game.component.html',
   imports: [
     GameBoardComponent,
-    NgIf,
-    AsyncPipe,
-    NgForOf
+    CommonModule,
+    GameCardComponent
   ],
   styleUrls: ['./running-game.component.scss']
 })
@@ -28,9 +27,10 @@ export class RunningGameComponent {
   protected cardsPaths$ = this.gameService.cardsPaths$;
   protected chosenCardsIds: number[] = [];
   protected playSubscription = new Subscription();
+  protected isPlaying = false;
   public constructor(private gameService: GameService) {}
 
-  protected clickOnCardHandler(gameCardId: number) {
+  protected clickOnCardHandler(gameCardId: number): void {
     const index = this.chosenCardsIds.findIndex(cardId => cardId === gameCardId);
     if (index !== -1) {
       this.chosenCardsIds.splice(index, 1);
@@ -39,12 +39,16 @@ export class RunningGameComponent {
     }
   }
 
-  protected play() {
+  protected play(): void {
+    if (this.isPlaying) {return;}
+    this.isPlaying = true;
     this.playSubscription.unsubscribe();
     // a player can choose 0 cards.
-    // TODO prevent playing while request is in progress
     this.playSubscription = this.gameService.play$(this.chosenCardsIds).subscribe(() => {
       this.chosenCardsIds = [];
+      this.isPlaying = false;
+    }, () => {
+      this.isPlaying = false;
     });
 
   }

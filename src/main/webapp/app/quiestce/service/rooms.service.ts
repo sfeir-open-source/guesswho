@@ -1,29 +1,31 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Room} from "../domain/Room.model";
-import {Observable, switchMap} from "rxjs";
-import {filter, map} from "rxjs/operators";
+import {Observable} from "rxjs";
+import {map} from "rxjs/operators";
 import {Game} from "../domain/Game.model";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
 })
 export class RoomsService {
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   public getMyRooms$(): Observable<Room[]>  {
-    return this.http.get<Room[]>("/api/rooms"); // TODO "/api"
+    return this.http.get<Room[]>("/api/rooms");
   }
 
   public getRoom$(id: number): Observable<Room>  {
-    //return this.http.get<Room>(`/api/room/${id}`);
+    // return this.http.get<Room>(`/api/room/${id}`);
     return this.getMyRooms$().pipe(map(rooms => {
-      const room = rooms.filter(room => room.id === id)[0];
-      if (!room) {
+      const room = rooms.filter(r => r.id === id);
+      if (room.length === 0) {
+        this.router.navigate(['/']).catch(() => {});
         throw new Error("room not found");
       }
-      return room;
+      return room[0];
     }));
   }
 

@@ -81,7 +81,6 @@ class AccountResourceIT {
 
     @Test
     @WithMockUser(TEST_USER_LOGIN)
-    @Disabled // TODO ??
     void testGetExistingAccount() throws Exception {
         Set<String> authorities = new HashSet<>();
         authorities.add(AuthoritiesConstants.ADMIN);

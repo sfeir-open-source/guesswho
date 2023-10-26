@@ -17,7 +17,7 @@ export class SelectOwnCardComponent {
   protected gameCards$ = this.gameService.gameData$.pipe(map(gameData => gameData.gameCards));
 
   public constructor(private gameService: GameService) {}
-  public clickOnCardHandler(gameCardId: number) {
+  public clickOnCardHandler(gameCardId: number): void {
     this.gameService.selectMyCard$(gameCardId).subscribe();
   }
 }

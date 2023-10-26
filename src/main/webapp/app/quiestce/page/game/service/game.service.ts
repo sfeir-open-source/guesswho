@@ -1,8 +1,17 @@
-import {Injectable, OnDestroy, OnInit} from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {combineLatest, Observable, of, OperatorFunction, ReplaySubject, Subscription, switchMap} from "rxjs";
+import {
+  combineLatest,
+  distinctUntilChanged,
+  Observable,
+  of,
+  OperatorFunction,
+  ReplaySubject,
+  Subscription,
+  switchMap
+} from "rxjs";
 import {Game} from "../../../domain/Game.model";
-import {filter, map, tap} from "rxjs/operators";
+import {catchError, filter, map, shareReplay, tap} from "rxjs/operators";
 import {ThemeService} from "../../../service/theme.service";
 import {ThemeCard} from "../../../domain/ThemeCard.model";
 import {PlayerService} from "../../../service/player.service";
@@ -10,27 +19,29 @@ import {RoomsService} from "../../../service/rooms.service";
 import {Room} from "../../../domain/Room.model";
 import {GameCard} from "../../../domain/GameCard.model";
 import {Message} from "../../../domain/Message.model";
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameService {
+  public messages$ = new ReplaySubject<Message[]>(1);
+
   private gameId: number | undefined;
   private roomId: number | undefined;
   private playerId: number | undefined;
   private roomData: Room | undefined;
   private _gameData$ = new ReplaySubject<Game>(1);
   private getGameDataSubscription = new Subscription();
-  protected currentThemeId: number | undefined = undefined;
+  private currentThemeId: number | undefined = undefined;
   private themeCards: ThemeCard[] = [];
   private lastMessageId = 0;
-  public messages$ = new ReplaySubject<Message[]>(1);
   private messages: Message[] = [];
 
   constructor(private http: HttpClient, private themeService: ThemeService, private playerService: PlayerService,
-              private roomsService: RoomsService) {}
+              private roomsService: RoomsService, private router: Router) {}
 
-  public setGame(roomId: number, gameId: number, playerId: number) {
+  public setGame(roomId: number, gameId: number, playerId: number): void {
     this.roomId = roomId;
     this.roomData = undefined;
     this.gameId = gameId;
@@ -41,7 +52,7 @@ export class GameService {
     this.updateDataFromServer();
   }
 
-  public updateDataFromServer() {
+  public updateDataFromServer(): void {
     if (this.gameId === undefined) {
       throw new Error("game data cannot be updated - no game set");
     }
@@ -85,33 +96,34 @@ export class GameService {
     return this._gameData$;
   }
 
-  get gameCards$() {
-    return this.gameData$.pipe(map(gameData => gameData.gameCards));
+  get gameCards$(): Observable<GameCard[]> {
+    return this.gameData$.pipe(
+      map(game => game.gameCards),
+      distinctUntilChanged((prev, cur) => JSON.stringify(prev)===JSON.stringify(cur))
+    );
   }
 
   get themeCards$(): Observable<ThemeCard[]> {
     return this._gameData$.pipe(
       switchMap((gameData) => {
-        if (gameData.theme.id === this.currentThemeId) return of(this.themeCards);
-        return combineLatest([of(gameData), this.themeService.getThemeCards$(gameData.theme.id)]).pipe(map(([gameData, themeCards]) => {
+        if (gameData.theme.id === this.currentThemeId) {return of(this.themeCards);}
+        return combineLatest([of(gameData), this.themeService.getThemeCards$(gameData.theme.id)]).pipe(map(([gameData2, themeCards]) => {
           this.themeCards = themeCards;
-          this.currentThemeId = gameData.theme.id;
+          this.currentThemeId = gameData2.theme.id;
           return themeCards;
         }))
       }));
   }
 
   get shouldSelectFirstCard$(): Observable<boolean> {
-    return this._gameData$.pipe(map(gameData => {
-      return gameData.gameCards.filter(card => {
+    return this._gameData$.pipe(map(gameData => gameData.gameCards.filter(card => {
         if (this.roomData?.player1.id===this.playerId) {
           return card.player1_chosen;
         } else if (this.roomData?.player2.id===this.playerId) {
           return card.player2_chosen;
         }
         throw new Error(`player ${this.playerId} not found in room`)
-      }).length===0
-    }));
+      }).length===0));
   }
 
   get hasGameStarted$(): Observable<boolean> {
@@ -119,22 +131,18 @@ export class GameService {
   }
 
   get disabledCardsIds$(): Observable<number[]> {
-    return this.gameData$.pipe(map(gameData => {
-      return gameData.gameCards.filter(card => {
+    return this.gameData$.pipe(map(gameData => gameData.gameCards.filter(card => {
         if (this.roomData?.player1.id===this.playerId) {
           return card.player1_discarded;
         } else if (this.roomData?.player2.id===this.playerId) {
           return card.player2_discarded;
         }
         throw new Error(`player ${this.playerId} not found in room`)
-      }).map(card => card.id);
-    }));
+      }).map(card => card.id)));
   }
 
   get isWaitingForOtherPlayerToChooseCard$(): Observable<boolean> {
-    return combineLatest([this.shouldSelectFirstCard$, this._gameData$]).pipe(map(([shouldSelectFirstCard, gameData]) => {
-      return !shouldSelectFirstCard && !gameData.nextTurn;
-    }));
+    return combineLatest([this.shouldSelectFirstCard$, this._gameData$]).pipe(map(([shouldSelectFirstCard, gameData]) => !shouldSelectFirstCard && !gameData.nextTurn));
   }
 
   get hasGameEnded$(): Observable<boolean> {
@@ -165,7 +173,7 @@ export class GameService {
 
   get cardsPaths$(): Observable<Record<number, Observable<string>>> {
     return this.gameCards$.pipe(map(gameCards => {
-      let pathsMap: Record<number, Observable<string>> = {};
+      const pathsMap: Record<number, Observable<string>> = {};
       gameCards.forEach(gameCard => {
         pathsMap[gameCard.id] = this.themeCards$.pipe(map(themeCards => {
           const themeCard = themeCards.find(tc => tc.id === gameCard.themeCard.id);
@@ -176,11 +184,15 @@ export class GameService {
         }));
       });
       return pathsMap;
-    }));
+    }), shareReplay(1));
   }
 
   private getGameData$(): Observable<Game> {
-    return this.http.get<Game>(`/api/games/${this.gameId}`);
+    return this.http.get<Game>(`/api/games/${this.gameId}`).pipe(catchError(err => {
+      console.error("game not found");
+      this.router.navigate(['/']).catch(() => {});
+      throw err;
+    }));
   }
 
   private getLastMessages$(): Observable<Message[]> {

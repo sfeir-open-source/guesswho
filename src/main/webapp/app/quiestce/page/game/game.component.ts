@@ -38,7 +38,7 @@ export class GameComponent implements OnInit, OnDestroy {
   public constructor(private gameService: GameService, private route: ActivatedRoute,
                      private playerService: PlayerService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.subscriptions.add(
       combineLatest([this.route.params, this.playerService.getCurrentPlayerId$()])
         .pipe(map(([params, currentPlayerId]) => {
@@ -46,19 +46,18 @@ export class GameComponent implements OnInit, OnDestroy {
     })).subscribe());
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
     clearInterval(this.refreshIntervalRef);
   }
 
-  private initGame(roomId: number, gameId: number, currentPlayerId: number) {
+  private initGame(roomId: number, gameId: number, currentPlayerId: number): void {
     this.currentPlayerId = currentPlayerId;
     if (gameId !== this.currentGameId) {
       this.currentGameId = gameId;
       this.gameService.setGame(roomId, gameId, this.currentPlayerId);
     }
     this.gameService.updateDataFromServer();
-    // @ts-ignore
-    this.refreshIntervalRef = setInterval(() => this.gameService.updateDataFromServer(), 2000);
+    this.refreshIntervalRef = setInterval(() => this.gameService.updateDataFromServer(), 2000) as unknown as number;
   }
 }

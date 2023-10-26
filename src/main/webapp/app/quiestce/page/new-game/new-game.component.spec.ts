@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NewGameComponent } from './new-game.component';
+import {HttpClientTestingModule} from "@angular/common/http/testing";
+import {RouterTestingModule} from "@angular/router/testing";
 
 describe('NewGameComponent', () => {
   let component: NewGameComponent;
@@ -8,7 +10,7 @@ describe('NewGameComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [NewGameComponent]
+      imports: [NewGameComponent, HttpClientTestingModule, RouterTestingModule]
     });
     fixture = TestBed.createComponent(NewGameComponent);
     component = fixture.componentInstance;

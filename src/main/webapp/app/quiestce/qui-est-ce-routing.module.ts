@@ -7,6 +7,8 @@ import {NewRoomComponent} from "./page/new-room/new-room.component";
 import {NewGameComponent} from "./page/new-game/new-game.component";
 import {GameComponent} from "./page/game/game.component";
 import {JoinRoomComponent} from "./page/join-room/join-room.component";
+import HomeComponent from "../home/home.component";
+import {authGuard} from "../guard/auth.guard";
 
 @NgModule({
   imports: [
@@ -14,28 +16,37 @@ import {JoinRoomComponent} from "./page/join-room/join-room.component";
       [
         {
           path: 'room',
-          redirectTo: '', // TODO does not work...
+          component: HomeComponent,
           pathMatch: 'full'
         },
         {
           path: 'room/new',
           component: NewRoomComponent,
+          canActivate: [authGuard],
         },
         {
           path: 'room/join',
           component: JoinRoomComponent,
+          canActivate: [authGuard],
         },
         {
           path: 'room/:roomId',
           component: RoomComponent,
+          canActivate: [authGuard],
         },
         {
           path: 'room/:roomId/new-game',
           component: NewGameComponent,
+          canActivate: [authGuard],
         },
         {
           path: 'room/:roomId/game/:gameId',
           component: GameComponent,
+          canActivate: [authGuard],
+        },
+        {
+          path: 'access-denied',
+          component: HomeComponent,
         },
       ],
     ),

@@ -20,22 +20,6 @@
     "project": ["./tsconfig.app.json", "./tsconfig.spec.json"]
   },
   "rules": {
-    "@angular-eslint/component-selector": [
-      "error",
-      {
-        "type": "element",
-        "prefix": "jhi",
-        "style": "kebab-case"
-      }
-    ],
-    "@angular-eslint/directive-selector": [
-      "error",
-      {
-        "type": "attribute",
-        "prefix": "jhi",
-        "style": "camelCase"
-      }
-    ],
     "@angular-eslint/relative-url-prefix": "error",
     "@typescript-eslint/ban-types": [
       "error",

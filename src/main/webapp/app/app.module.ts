@@ -1,59 +1,48 @@
-import { NgModule, LOCALE_ID } from '@angular/core';
-import { registerLocaleData } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
+import {LOCALE_ID, NgModule} from '@angular/core';
+import {registerLocaleData} from '@angular/common';
+import {HttpClientModule} from '@angular/common/http';
 import locale from '@angular/common/locales/fr';
-import { BrowserModule, Title } from '@angular/platform-browser';
-import { TitleStrategy } from '@angular/router';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { CookieService } from 'ngx-cookie-service';
+import {BrowserModule, Title} from '@angular/platform-browser';
+import {TitleStrategy} from '@angular/router';
+import {ServiceWorkerModule} from '@angular/service-worker';
+import {FaIconLibrary} from '@fortawesome/angular-fontawesome';
+import {CookieService} from 'ngx-cookie-service';
 import dayjs from 'dayjs/esm';
-import { NgbDateAdapter, NgbDatepickerConfig } from '@ng-bootstrap/ng-bootstrap';
+import {NgbDateAdapter, NgbDatepickerConfig} from '@ng-bootstrap/ng-bootstrap';
 
-import { ApplicationConfigService } from 'app/core/config/application-config.service';
+import {ApplicationConfigService} from 'app/core/config/application-config.service';
 import './config/dayjs';
-import { TranslationModule } from 'app/shared/language/translation.module';
-import { httpInterceptorProviders } from 'app/core/interceptor/index';
-import { AppRoutingModule } from './app-routing.module';
+import {TranslationModule} from 'app/shared/language/translation.module';
+import {httpInterceptorProviders} from 'app/core/interceptor/index';
+import {AppRoutingModule} from './app-routing.module';
 // jhipster-needle-angular-add-module-import JHipster will add new module here
-import { NgbDateDayjsAdapter } from './config/datepicker-adapter';
-import { fontAwesomeIcons } from './config/font-awesome-icons';
+import {NgbDateDayjsAdapter} from './config/datepicker-adapter';
+import {fontAwesomeIcons} from './config/font-awesome-icons';
 import MainComponent from './layouts/main/main.component';
 import MainModule from './layouts/main/main.module';
-import { AppPageTitleStrategy } from './app-page-title-strategy';
-import { TrackerService } from './core/tracker/tracker.service';
-import { RoomComponent } from './quiestce/page/room/room.component';
-import { NewRoomComponent } from './quiestce/page/new-room/new-room.component';
-import {FormsModule} from "@angular/forms";
-import SharedModule from "./shared/shared.module";
-import { NewGameComponent } from './quiestce/page/new-game/new-game.component';
-import { GameComponent } from './quiestce/page/game/game.component';
-import { JoinRoomComponent } from './quiestce/page/join-room/join-room.component';
-import { GameBoardComponent } from './quiestce/page/game/component/game-board/game-board.component';
-import { SelectOwnCardComponent } from './quiestce/page/game/component/select-own-card/select-own-card.component';
-import { RunningGameComponent } from './quiestce/page/game/component/running-game/running-game.component';
+import {AppPageTitleStrategy} from './app-page-title-strategy';
+import {TrackerService} from './core/tracker/tracker.service';
 
 @NgModule({
-  imports: [
-    BrowserModule,
-    // jhipster-needle-angular-add-module JHipster will add new module here
-    AppRoutingModule,
-    // Set this to true to enable service worker (PWA)
-    ServiceWorkerModule.register('ngsw-worker.js', {enabled: false}),
-    HttpClientModule,
-    MainModule,
-    TranslationModule,
-  ],
-  providers: [
-    Title,
-    CookieService,
-    { provide: LOCALE_ID, useValue: 'fr' },
-    { provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter },
-    httpInterceptorProviders,
-    { provide: TitleStrategy, useClass: AppPageTitleStrategy },
-  ],
-  bootstrap: [MainComponent],
-  declarations: [],
+    imports: [
+        BrowserModule,
+        // jhipster-needle-angular-add-module JHipster will add new module here
+        AppRoutingModule,
+        // Set this to true to enable service worker (PWA)
+        ServiceWorkerModule.register('ngsw-worker.js', {enabled: false}),
+        HttpClientModule,
+        MainModule,
+        TranslationModule,
+    ],
+    providers: [
+        Title,
+        CookieService,
+        {provide: LOCALE_ID, useValue: 'fr'},
+        {provide: NgbDateAdapter, useClass: NgbDateDayjsAdapter},
+        httpInterceptorProviders,
+        {provide: TitleStrategy, useClass: AppPageTitleStrategy},
+    ],
+    bootstrap: [MainComponent]
 })
 export class AppModule {
   constructor(

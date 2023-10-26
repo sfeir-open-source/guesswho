@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SelectOwnCardComponent } from './select-own-card.component';
+import {GameService} from "../../service/game.service";
+import {HttpClientTestingModule} from "@angular/common/http/testing";
 
 describe('SelectOwnCardComponent', () => {
   let component: SelectOwnCardComponent;
@@ -8,7 +10,7 @@ describe('SelectOwnCardComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [SelectOwnCardComponent]
+      imports: [SelectOwnCardComponent, HttpClientTestingModule],
     });
     fixture = TestBed.createComponent(SelectOwnCardComponent);
     component = fixture.componentInstance;

@@ -13,7 +13,7 @@ import com.tngtech.archunit.lang.ArchRule;
 class TechnicalStructureTest {
 
     // prettier-ignore
-    //@ArchTest // TODO update
+    @ArchTest
     static final ArchRule respectsTechnicalArchitectureLayers = layeredArchitecture()
         .consideringAllDependencies()
         .layer("Config").definedBy("..config..")
@@ -22,13 +22,15 @@ class TechnicalStructureTest {
         .layer("Security").definedBy("..security..")
         .optionalLayer("Persistence").definedBy("..repository..")
         .layer("Domain").definedBy("..domain..")
+        .layer("Listener").definedBy("..listener..")
+        .layer("Session").definedBy("..session..")
 
         .whereLayer("Config").mayNotBeAccessedByAnyLayer()
         .whereLayer("Web").mayOnlyBeAccessedByLayers("Config")
-        .whereLayer("Service").mayOnlyBeAccessedByLayers("Web", "Config")
+        .whereLayer("Service").mayOnlyBeAccessedByLayers("Web", "Config", "Listener")
         .whereLayer("Security").mayOnlyBeAccessedByLayers("Config", "Service", "Web")
         .whereLayer("Persistence").mayOnlyBeAccessedByLayers("Service", "Security", "Web", "Config")
-        .whereLayer("Domain").mayOnlyBeAccessedByLayers("Persistence", "Service", "Security", "Web", "Config")
+        .whereLayer("Domain").mayOnlyBeAccessedByLayers("Persistence", "Service", "Security", "Web", "Config", "Session")
 
         .ignoreDependency(belongToAnyOf(QuiestceApp.class), alwaysTrue())
         .ignoreDependency(alwaysTrue(), belongToAnyOf(

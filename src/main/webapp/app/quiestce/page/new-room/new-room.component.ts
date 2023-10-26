@@ -18,11 +18,12 @@ import {FontAwesomeModule} from "@fortawesome/angular-fontawesome";
   styleUrls: ['./new-room.component.scss']
 })
 export class NewRoomComponent implements OnDestroy {
-  constructor(private roomsService: RoomsService, private router: Router) {
-  }
   public newRoomName = "";
   private subscriptions = new Subscription();
-  public createRoom() {
+
+  constructor(private roomsService: RoomsService, private router: Router) {
+  }
+  public createRoom(): void {
     if (this.newRoomName.trim() === "") {
       return;
     }
@@ -32,7 +33,7 @@ export class NewRoomComponent implements OnDestroy {
     })).subscribe());
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
 }

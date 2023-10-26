@@ -20,17 +20,17 @@ export class ChatComponent implements OnInit {
   protected currentPlayer$ = this.playerService.getCurrentPlayerId$();
   public constructor(private gameService: GameService, private playerService: PlayerService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.messages$.subscribe(() => {
       setTimeout(() => {
         const div = document.getElementById("messages-list");
-        if (div) div.scrollTop = div.scrollHeight;
+        if (div) {div.scrollTop = div.scrollHeight;}
       }, 20);
     })
   }
 
-  protected sendMessage() {
-    if (this.sending || this.newMessage.trim() === '') return;
+  protected sendMessage(): void {
+    if (this.sending || this.newMessage.trim() === '') {return;}
     this.sending = true;
     this.gameService.sendMessage$(this.newMessage).subscribe(() => {
       this.sending = false;
