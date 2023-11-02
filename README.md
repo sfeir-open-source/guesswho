@@ -26,7 +26,8 @@ re-delivered. Follow these steps to add a theme:
 
 Features:
 
-    - login using Google
+    - login using Google (and remove existing user-password authentication and manual account creation, password reset, etc)
+    - add other themes
     - make the interface mobile-friendly (responsive) and improve it so that all cards are visible without scrolling on desktop
     - let the user undo a card removal (if he discarded it by mistake and notice afterwards)
     - admin interface to add themes (and user interface to propose themes, that admin can validate ?)
@@ -36,12 +37,19 @@ Features:
     - let a user delete old rooms
     - button to end a game (no one wins, and a new game can be started - useful if you do not end a game and come back some days later)
     - let anonymous users join rooms (using existing user_anonymous entity)
+    - when user A win because user B guessed the wrong card, the card user B had to guess is displayed to user B, but we
+        should also display to user A the card he was trying to guess (so that he can see if he discarded that card or not).
 
 Technical improvements / fixes:
 
-    - BEFORE DEPLOYMENT: remove default accounts :)
-    - BEFORE DEPLOYMENT: re-check security (headers, csrf, default configs, check jhipster security page)
     - backend:
+        - some tests are flaky (sometimes failing, sometimes not)
+            - at least GameResourceIT.getGameDetailsWhenWon ("$.gameCards[1].player2_chosen" expected true got false),
+                GameResourceIT.playAndLoose ("$.gameCards[0].player1_chosen" expected true got false)
+                and GameResourceIT.playAndWin ("$.gameCards[0].player1_chosen" expected true got false)
+            - when starting the tests with IntelliJ, they pass, and when starting the tests using the CLI, they fail.
+            - this is probably due to the fact that tests are not independent (database not reset between tests ?)
+            - to be investigated!
         - replace some of the AccessDeniedException (403) by a BadRequestException (400)
         - make sure no stack traces are sent to frontend (e.g. in case of error 500)
         - refactoring: avoid fields player1,player2, better use a table (easier to factorise the code)
@@ -51,12 +59,12 @@ Technical improvements / fixes:
         - /api/themes/{id} should return an object, not the array of theme cards
         - create different DTOs for endpoints (currently full objects are returned with null fields - example:
               /api/games: $.room.player1 is null => instead, just do not include this field in the response) 
-        - use web sockets for game status updates (new message, other player played) => less data transmitted
+        - use web sockets for game status updates (new message, other player played) => less data transmitted faster
+        - cleanup useless jhipster dependencies ? Or get rid of JHipster now that the project is generated ?
     - frontend:
-        - the board interface is refreshed every two seconds. Update the code so that the HTML is not refreshed if not needed
         - add tests (services, components)
-        - refactor game service => simplify observables & data refresh
         - improve error management (if play() request fails, display/explain error)
+            - eg: if user try to create a game at the same time as another user, one of the request will fail. Explain the error.
         - add a store
         - update code structure: get rid of JHipster (for frontend)
         - move ineline css to scss files
@@ -65,20 +73,118 @@ Technical improvements / fixes:
 
 ## Deployment guide
 
-TODO
+### Build
+
+Before building the project, make sure docker is started on your machine, as it is needed for integration tests.
+
+To build the project for production: ./mvnw -Pprod clean verify
+Same but skipping tests (some tests are flaky for now... ): ./mvnw -Pprod clean verify -DskipTests
+
+It will generate a jar file in the target/ folder. If you need a war file (to deploy on an app server like Tomcat), you
+can update the line <packaging>jar</packaging> in pom.xml to <packaging>war</packaging> and build the project again.
 
 
+### Test the build locally
+
+Start a local database in a terminal:
+    - docker compose --file src/main/docker/postgresql.yml up
+
+Start the app in another terminal:
+    - export SPRING_DATASOURCE_PASSWORD=test-for-local-dev-only
+    - java -jar target/quiestce.jar
+
+There will be no users available. If you want to temporarily add a user, you can:
+    - add users in src/main/resources/config/liquibase/data/user.csv
+    - add their role in src/main/resources/config/liquibase/data/user_authority.csv
+    - => check examples in fake-data/user.csv and fake-data/user_authority.csv: add similar lines - just use other IDs.
+
+But do not forget to remove these users before deploying in production (or change their password)!
+
+When you are done:
+    - ctrl+C in both terminals
+    - remove containers:        docker compose --file src/main/docker/postgresql.yml down
+    - delete local database:    docker volume rm quiestce_quiestce-postgres-db
+
+
+### Deployment
+
+TO DO - describe the deployment of the jar/war on GCP
+
+Notes:
+    - before deploying the app in production, make sure to review relevant sections in this page: https://www.jhipster.tech/security/
+    - the app can be deployed on an application server (e.g. Tomcat): build the app as a war file, and add the war file
+        in the deploy folder of the app server.
+    - you can also deploy the app as a standalone jar: java -jar quiestce.jar
+    - the app will try to connect to a Postgres database named "quiestce" on localhost:5432, with username quiestce
+    - you need to set the password, for instance using an environment variable: SPRING_DATASOURCE_PASSWORD=xxx
+    - you can also erase the database connexion string and the username:
+        SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5433/dbname
+        SPRING_DATASOURCE_USERNAME=quiestce
+    - It is advised to dockerize the application (one openjdk container to start the app as standalone jar, and one 
+        postgresql container for the database).
 
 ## Dev guide
 
-- Start backend only: ./mvnw -P-webapp
-- Start frontend only: npm start
+### Commands
+
+Before building the project, make sure docker is started on your machine, as it is needed for integration tests.
+
+- Start backend only with live-reload: ./mvnw -P-webapp
+- Start frontend only with live-reload: npm start
+- Start backend and frontend for local testing: ./mvnw
 - Login: http://localhost:8080
 - Access swagger: http://localhost:8080/swagger-ui/index.html
 
-Notes:
+There are 3 users available locally: admin/admin, admin2/admin, user/user
 
+Notes:
+    
+    - when starting back and front with live reload (see commands above), you cannot easily test the game by opening two
+        browsers and logging-in with one user in browser A and another user in browser B. The state of both pages will
+        be synced (so if you change of page on one browser, the page will also change on the other browser). This is due
+        to how the live-reload and local development is configured. So to test a game during development, you should 
+        switch account each time you want to test an action as the other user. Another option is to use './mvnw' to 
+        start the back and the front at once.
     - when updating initial database schema or (fake) data, you should delete target/h2db folder in case you have issues
+
+
+### Structure
+
+- The project follows the standard maven structure: backend code in src/main/java, tests in src/test, frontend in src/main/webapp
+
+#### Backend
+
+- Database:
+    - Database tables definitions can be found in src/main/resources/config/liquibase/changelog
+    - Default data: src/main/resources/config/liquibase/data (files referenced in the xmls in changelog)
+    - Fake data (for local dev and tests): in src/main/resources/config/liquibase/fake-data (files referenced in the xmls in changelog)
+    - Entities: in src/main/java/be/vandenn3/quiestce/domain
+      - User: represents a real User (that can currently login with credentials, later with Google)
+      - UserAnonymous: represents a non-logged-in user (to enable playing without an account - not implemented yet)
+      - Player: represents a player (either a User, UserAnonymous, or later, an AI).
+        - When a user is logged in, a player is created for him if it does not exist yet (see PlayerService.getPlayerForLoggedInUser)
+      - Room: it is a place where two players can play games.
+      - Game: represents one game.
+      - Theme: a theme lists the existing cards (for instance: 25 programming languages)
+      - ThemeCard: the list of cards for each theme.
+      - GameCard: when a game is created (and its theme selected), one GameCard object is created for each ThemeCard.
+            It contains the state of the card for each player (the card he chose, and the cards he discarded)
+      - Message: represents a message in the chat of a game
+      - Picture: a picture object. The file itself is currently included in frontend static files.
+      - Authority: there are currently two roles: ROLE_USER and ROLE_ADMIN. Users should only have ROLE_USER.
+
+#### Frontend
+
+- Most of the code is in src/main/webapp/app/quiestce. Other files were mainly created by JHipster.
+
+
+
+
+
+
+
+
+
 
 
 

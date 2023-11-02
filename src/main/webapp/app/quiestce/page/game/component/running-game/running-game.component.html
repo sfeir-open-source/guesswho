@@ -11,12 +11,12 @@
 
 <ng-template #runningGame>
   <div *ngIf="isMyTurn$ | async; else notMyTurn">
-    <p>Sélectionnez les cartes que vous souhaitez éliminer, puis validez votre choix</p>
+    <p>Posez une question à l'autre joueur via le chat. Sélectionnez les cartes que vous souhaitez éliminer, puis validez votre choix.</p>
     <button class="btn btn-primary" (click)="play()">Valider</button>
   </div>
 
   <ng-template #notMyTurn>
-    En attente du choix de l'autre joueur.
+    En attente du choix de l'autre joueur. Utilisez le chat pour répondre à sa question.
   </ng-template>
 </ng-template>
 <br>

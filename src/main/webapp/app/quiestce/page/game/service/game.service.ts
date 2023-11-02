@@ -66,6 +66,7 @@ export class GameService {
           this.messages$.next(this.messages);
           this.lastMessageId = lastMessages[lastMessages.length-1].id;
         }
+        this.sortGameCards(roomData, gameData);
         this._gameData$.next(gameData);
     })).subscribe();
   }
@@ -197,5 +198,23 @@ export class GameService {
 
   private getLastMessages$(): Observable<Message[]> {
     return this.http.get<Message[]>(`/api/games/${this.gameId}/message?lastMessageId=${this.lastMessageId}`);
+  }
+
+  private sortGameCards(room: Room, gameData: Game) {
+    gameData.gameCards.sort((card1, card2) => {
+      if (this.hasCurrentPlayerDiscarded(room, card1)==this.hasCurrentPlayerDiscarded(room, card2)) {
+        return card1.id - card2.id;
+      }
+      return this.hasCurrentPlayerDiscarded(room, card1) ? 1 : -1;
+    });
+  }
+
+  private hasCurrentPlayerDiscarded(roomData: Room, card: GameCard) {
+    if (roomData.player1.id===this.playerId) {
+      return card.player1_discarded;
+    } else if (this.roomData?.player2.id===this.playerId) {
+      return card.player2_discarded;
+    }
+    throw new Error(`player ${this.playerId} not found in room`);
   }
 }

@@ -9,6 +9,7 @@ services:
       - MANAGEMENT_PROMETHEUS_METRICS_EXPORT_ENABLED=true
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgresql:5432/quiestce
       - SPRING_LIQUIBASE_URL=jdbc:postgresql://postgresql:5432/quiestce
+      -
     ports:
       - 127.0.0.1:8080:8080
     healthcheck:
